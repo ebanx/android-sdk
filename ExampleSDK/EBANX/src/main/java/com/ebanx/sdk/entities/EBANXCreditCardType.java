@@ -1,6 +1,10 @@
 package com.ebanx.sdk.entities;
 
+/**
+ * Used to represent payment type code
+ */
 public enum EBANXCreditCardType {
+
     /**
      * Amex type
      */

@@ -1,15 +1,31 @@
 package com.ebanx.sdk.entities;
 
+/**
+ * Used to represent error from API response
+ */
 public final class EBANXError {
-    /// Status
+
+    /**
+     * Status
+     */
     public String status;
 
-    /// Code
+    /**
+     * Code
+     */
     public String code;
 
-    /// Message
+    /**
+     * Message
+     */
     public String message;
 
+    /**
+     * Create EBANXError
+     * @param status String
+     * @param code String
+     * @param message String
+     */
     public EBANXError(String status, String code, String message) {
         this.status = status;
         this.code = code;

@@ -1,22 +1,43 @@
 package com.ebanx.sdk.entities;
 
+/**
+ * Used to store all credit card properties
+ */
 public final class EBANXCreditCard {
 
-    /// Credit card number
+    /**
+     * Credit card number
+     */
     private String number;
 
-    /// Credit card name
+    /**
+     * Credit card name
+     */
     private String name;
 
-    /// Credit card validate. Format: 'MM/AAAA'
+    /**
+     * Credit card validate. Format: 'MM/AAAA'
+     */
     private String dueDate;
 
-    /// Credit card CVV
+    /**
+     * Credit card CVV
+     */
     private String cvv;
 
-    /// Credit card payment type code
+    /**
+     * Credit card payment type code
+     */
     private EBANXCreditCardType type;
 
+    /**
+     * Create EBANXCreditCard
+     * @param name String
+     * @param number String
+     * @param dueDate String
+     * @param cvv String
+     * @param type EBANXCreditCardType
+     */
     public EBANXCreditCard(String name, String number, String dueDate, String cvv, EBANXCreditCardType type) {
         this.name = name;
         this.number = number;
@@ -57,11 +78,11 @@ public final class EBANXCreditCard {
         this.cvv = cvv;
     }
 
-    public String getType() {
+    public EBANXCreditCardType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(EBANXCreditCardType type) {
         this.type = type;
     }
 }

@@ -1,5 +1,8 @@
 package com.ebanx.sdk;
 
+import com.ebanx.sdk.entities.EBANXCountry;
+import com.ebanx.sdk.entities.EBANXToken;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,6 +15,9 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+
+        EBANXCountry country = EBANXCountry.BR;
+
+        assertEquals(country.description(), "br");
     }
 }

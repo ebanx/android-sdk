@@ -1,13 +1,25 @@
 package com.ebanx.sdk.entities;
 
+/**
+ * Credit card token
+ */
 public final class EBANXToken {
 
-    /// Credit card token
+    /**
+     * Credit card token
+     */
     private String token;
 
-    /// Credit card number masked
+    /**
+     * Credit card number masked
+     */
     private String cardNumberMasked;
 
+    /**
+     * Create EBANXToken
+     * @param token String
+     * @param cardNumberMasked String
+     */
     public EBANXToken(String token, String cardNumberMasked) {
         this.token = token;
         this.cardNumberMasked = cardNumberMasked;
