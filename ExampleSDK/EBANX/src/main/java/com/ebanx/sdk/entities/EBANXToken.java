@@ -40,4 +40,12 @@ public final class EBANXToken {
     public void setCardNumberMasked(String cardNumberMasked) {
         this.cardNumberMasked = cardNumberMasked;
     }
+
+    @Override
+    public String toString() {
+        return "EBANXToken{" +
+                "token='" + token + '\'' +
+                ", cardNumberMasked='" + cardNumberMasked + '\'' +
+                '}';
+    }
 }

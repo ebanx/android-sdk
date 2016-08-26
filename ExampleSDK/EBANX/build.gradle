@@ -13,11 +13,27 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
+//    sourceSets {
+//        main {
+//            java {
+//                srcDir 'src/main/java'
+//            }
+//            resources {
+//                srcDir 'src/../lib'
+//            }
+//        }
+//    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -28,4 +44,45 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
+
+//task jarTask(type: Jar) {
+//    baseName="my-sdk-android"
+//    from 'src/main/java'
+//}
+//
+//task createJarWithDependencies(type: Jar) {
+//    baseName = "my-sdk-android-jar-with-dependencies"
+//
+//    from {
+//        configurations.compile.collect {
+//            it.isDirectory() ? it : zipTree(it)
+//        }
+//
+//    }
+//
+//    with jarTask
+//}
+//
+//configurations {
+//    jarConfiguration
+//}
+//
+//artifacts {
+//    jarConfiguration jarTask
+//}
+
+//task clearJar(type: Delete) {
+//    delete 'libs/EBANX.jar'
+//}
+//
+//task makeJar(type: Copy) {
+//    from('build/intermediates/bundles/release')
+//    into('libs')
+//    include('classes.jar', 'okio-1.9.0.jar', 'okhttp-3.4.1.jar')
+//    rename('classes.jar', 'EBANX.jar')
+//}
+//
+//makeJar.dependsOn(clearJar, build)
+

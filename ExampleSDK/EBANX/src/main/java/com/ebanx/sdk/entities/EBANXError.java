@@ -5,6 +5,13 @@ package com.ebanx.sdk.entities;
  */
 public final class EBANXError {
 
+    public enum ErrorType {
+        PublicKeyNotSet,
+        InvalidPublicKey,
+        ParseError,
+        GenericError
+    }
+
     /**
      * Status
      */
@@ -21,7 +28,12 @@ public final class EBANXError {
     public String message;
 
     /**
+     * type
+     */
+    private ErrorType type;
+    /**
      * Create EBANXError
+     *
      * @param status String
      * @param code String
      * @param message String
@@ -54,5 +66,19 @@ public final class EBANXError {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public ErrorType getType() {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return "EBANXError{" +
+                "status='" + status + '\'' +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", type=" + type +
+                '}';
     }
 }
