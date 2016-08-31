@@ -25,7 +25,7 @@ public final class EBANX {
 
     private static EBANX instance = new EBANX();
 
-    private EBANXNetwork network = new EBANXNetwork();
+    private EBANXNetwork network;
 
     private EBANX() {}
 
@@ -48,6 +48,8 @@ public final class EBANX {
         instance.context = context;
         instance.publicKey = publicKey;
         instance.testMode = testMode;
+
+        instance.network = new EBANXNetwork(instance.context);
     }
 
     /**

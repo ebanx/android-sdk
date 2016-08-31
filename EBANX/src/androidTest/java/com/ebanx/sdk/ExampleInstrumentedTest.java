@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.ebanx.androidsdk", appContext.getPackageName());
+        assertEquals("com.ebanx.sdk", appContext.getPackageName());
     }
 }

@@ -32,6 +32,7 @@ public final class EBANXCreditCard {
 
     /**
      * Create EBANXCreditCard
+     *
      * @param name String
      * @param number String
      * @param dueDate String

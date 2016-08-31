@@ -1,6 +1,9 @@
 package com.ebanx.sdk.network;
 
-import android.util.Log;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 
 import com.ebanx.sdk.EBANX;
 import com.ebanx.sdk.entities.EBANXCountry;
@@ -9,30 +12,30 @@ import com.ebanx.sdk.entities.EBANXCreditCard;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
 
 public final class EBANXNetwork implements EBANXNetworkingInterface {
 
     private static final String PROD_URL = "https://api.ebanx.com/ws/";
     private static final String DEV_URL  = "https://sandbox.ebanx.com/ws/";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "EBANXNetwork";
+    private static final int TIMEOUT = 10000;
+    private static final int CONNECT_TIMEOUT = 15000;
+    private Context context;
 
-    private OkHttpClient client;
+    private enum Method {
+        GET,
+        POST
+    }
 
-    /**
-     * Default constructor for EBANXNetwork
-     */
-    public EBANXNetwork() {
-        this.client =  new OkHttpClient();
+    public EBANXNetwork(Context context) {
+        this.context = context;
     }
 
     private String getBaseURL() {
@@ -49,7 +52,7 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
     @Override
     public void token(EBANXCreditCard card, EBANXCountry countryType, final EBANXResponseNetwork complete)  {
 
-        JSONObject parameters = new JSONObject();
+        final JSONObject parameters = new JSONObject();
         JSONObject creditcard = new JSONObject();
 
         try {
@@ -67,7 +70,7 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
             complete.OnFailure(e);
         }
 
-        executeRequest("token", RequestBody.create(JSON, parameters.toString()), complete);
+        executeAsyncTask("token", Method.POST, parameters, complete);
     }
 
     /**
@@ -88,36 +91,88 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
             parameters.put("card_cvv", cvv);
 
         } catch (JSONException e) {
+
             complete.OnFailure(e);
         }
 
-        executeRequest("token/setCVV", RequestBody.create(JSON, parameters.toString()), complete);
+        executeAsyncTask("token/setCVV", Method.POST, parameters, complete);
     }
 
-    private void executeRequest(String path, RequestBody body, final EBANXResponseNetwork complete) {
-        Request request = new Request.Builder()
-                .addHeader("Content-Type", "application/json")
-                .url(getBaseURL() + path)
-                .post(body)
-                .build();
+    private void executeAsyncTask(final String path, final Method method, final JSONObject parameters, final EBANXResponseNetwork complete) {
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(TAG, e.toString());
-                complete.OnFailure(e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                //Log.d(TAG, response.body().string());
-
-                if (!response.isSuccessful()) {
-                    complete.OnFailure(new IOException(response.message()));
-                } else {
-                    complete.OnSuccess(response.body().string());
+        if (isOnline()) {
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    complete.OnSuccess(s);
                 }
+
+                @Override
+                protected String doInBackground(Void... voids) {
+                    return executeRequest(path, method, parameters);
+                }
+            }.execute();
+        } else {
+            complete.OnFailure(new Exception("No internet connection"));
+        }
+    }
+
+    private HttpsURLConnection connect(String urlString, Method method, JSONObject parameters) throws IOException {
+        URL url = new URL(urlString);
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setReadTimeout(TIMEOUT);
+        connection.setConnectTimeout(CONNECT_TIMEOUT);
+        connection.setRequestMethod(method.name());
+        connection.setDoInput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept", "application/json");
+
+        if (method == Method.POST) {
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            OutputStreamWriter out = new  OutputStreamWriter(connection.getOutputStream());
+            out.write(parameters.toString());
+            out.close();
+        }
+
+        connection.connect();
+        return connection;
+    }
+
+    private String executeRequest(String path, Method method, JSONObject parameters) {
+        try {
+            HttpsURLConnection connection = connect(  getBaseURL() + path, method, parameters);
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                InputStream is = connection.getInputStream();
+                return parseResponse(is);
             }
-        });
+
+        } catch (Exception e) {
+            return e.toString();
+        }
+
+        return null;
+    }
+
+    private String parseResponse(InputStream is) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }
