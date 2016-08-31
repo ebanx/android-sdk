@@ -1,6 +1,7 @@
 package com.ebanx.sdk;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ebanx.sdk.entities.EBANXCountry;
 import com.ebanx.sdk.entities.EBANXCreditCard;
@@ -19,10 +20,12 @@ import java.util.List;
  */
 public final class EBANX {
 
+    public static final String TAG = "EBANX";
     private String publicKey;
     private boolean testMode;
     private Context context;
 
+    private static boolean isSDKInitialized = false;
     private static EBANX instance = new EBANX();
 
     private EBANXNetwork network;
@@ -35,6 +38,10 @@ public final class EBANX {
      * @param publicKey String
      */
     public static void configure(Context context, String publicKey) {
+        if (isSDKInitialized) {
+            return;
+        }
+
         EBANX.configure(context, publicKey, false);
     }
 
@@ -45,11 +52,16 @@ public final class EBANX {
      * @param testMode boolean
      */
     public static void configure(Context context, String publicKey, boolean testMode) {
+        if (isSDKInitialized) {
+            return;
+        }
+
+        Log.d(TAG, publicKey);
         instance.context = context;
         instance.publicKey = publicKey;
         instance.testMode = testMode;
-
         instance.network = new EBANXNetwork(instance.context);
+        isSDKInitialized = true;
     }
 
     /**
@@ -94,7 +106,9 @@ public final class EBANX {
          * @param card EBANXCreditCard
          * @param country EBANXCountry
          */
-        public static void create(EBANXCreditCard card, EBANXCountry country, final EBANXTokenRequestComplete complete) {
+        public static void
+
+        create(EBANXCreditCard card, EBANXCountry country, final EBANXTokenRequestComplete complete) {
             if (!publicKeyIsSet()) {
                 complete.APIError(EBANXError.createPublicKeyNotSetError());
                 return;
