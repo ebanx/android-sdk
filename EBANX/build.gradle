@@ -38,7 +38,6 @@ dependencies {
     })
 
     compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 
     // Testing libraries
     testCompile 'org.robolectric:robolectric:3.0'
