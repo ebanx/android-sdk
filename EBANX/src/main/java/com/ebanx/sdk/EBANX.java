@@ -37,7 +37,7 @@ public final class EBANX {
      *
      * @param publicKey String
      */
-    public static void configure(Context context, String publicKey) {
+    public static void configure(Context context, String publicKey)  {
         if (isSDKInitialized) {
             return;
         }
@@ -56,11 +56,11 @@ public final class EBANX {
             return;
         }
 
-        Log.d(TAG, publicKey);
         instance.context = context;
         instance.publicKey = publicKey;
         instance.testMode = testMode;
         instance.network = new EBANXNetwork(instance.context);
+        EBANX.Token.storage = new EBANXStorage(instance.context);
         isSDKInitialized = true;
     }
 
@@ -90,13 +90,17 @@ public final class EBANX {
         return false;
     }
 
+    static void shutDown() {
+        isSDKInitialized = false;
+    }
+
     /**
      * Basic class for token calls
      */
     public static final class Token {
 
-        private static final String TAG = "EBANX.Token";
-        private static EBANXStorage storage = new EBANXStorage(instance.context);
+        private static final String TAG = "EBANXToken";
+        static EBANXStorage storage;
 
         private Token() {}
 
@@ -106,9 +110,7 @@ public final class EBANX {
          * @param card EBANXCreditCard
          * @param country EBANXCountry
          */
-        public static void
-
-        create(EBANXCreditCard card, EBANXCountry country, final EBANXTokenRequestComplete complete) {
+        public static void create(EBANXCreditCard card, EBANXCountry country, final EBANXTokenRequestComplete complete) {
             if (!publicKeyIsSet()) {
                 complete.APIError(EBANXError.createPublicKeyNotSetError());
                 return;
@@ -180,6 +182,15 @@ public final class EBANX {
          */
         public static EBANXToken getToken(String cardNumberMasked) throws Exception {
             return storage.getToken(cardNumberMasked);
+        }
+
+        /**
+         * Save token from card number masked
+         *
+         * @param token EBANXToken
+         */
+        public static void saveToke(EBANXToken token) {
+            storage.saveToken(token);
         }
 
         /**

@@ -1,5 +1,7 @@
 package com.ebanx.sdk.entities;
 
+import com.ebanx.sdk.EBANX;
+
 /**
  * Used to represent error from API response
  */

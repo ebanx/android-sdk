@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ebanx.sdk.EBANX;
 import com.ebanx.sdk.entities.EBANXToken;
 
 import org.json.JSONArray;
@@ -23,12 +24,12 @@ public final class EBANXStorage {
     private static final String TOKENS = "tokens";
     private List<EBANXToken> currentTokens = new ArrayList<>();
 
-    public EBANXStorage(Context context) {
+    public EBANXStorage(Context context)  {
         preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
         editor = preferences.edit();
 
         String tokenString = preferences.getString(TOKENS, "");
-        if (!tokenString.equalsIgnoreCase("")) {
+        if (preferences.contains(TOKENS) && !tokenString.equalsIgnoreCase("")) {
             try {
                 JSONObject object = new JSONObject(tokenString);
 
@@ -51,7 +52,6 @@ public final class EBANXStorage {
             if (t.getCardNumberMasked().equalsIgnoreCase(token.getCardNumberMasked())) {
                 currentTokens.set(index, token);
                 haveToken = true;
-                return;
             }
             index++;
         }
@@ -64,20 +64,21 @@ public final class EBANXStorage {
     }
 
     public EBANXToken getToken(String cardNumberMasked)  {
+        EBANXToken currentToken = null;
         for (EBANXToken token : currentTokens) {
             if (token.getCardNumberMasked().equalsIgnoreCase(cardNumberMasked)) {
-                return token;
+                currentToken = token;
             }
         }
 
-        return null;
+        return currentToken;
     }
 
     public void deleteToken(EBANXToken token) {
         for (EBANXToken t : currentTokens) {
             if (t.getCardNumberMasked().equalsIgnoreCase(token.getCardNumberMasked())) {
                 currentTokens.remove(t);
-                return;
+                break;
             }
         }
 
