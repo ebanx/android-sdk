@@ -16,14 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.internal.util.StringJoiner;
 import org.mockito.runners.MockitoJUnitRunner;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+
 @RunWith(MockitoJUnitRunner.class)
 public class EBANXTest {
 
@@ -47,9 +42,16 @@ public class EBANXTest {
     public void testConfigurePublicKeySuccess() throws Exception {
         String publicKey = "123456";
         EBANX.configure(mockedContext, publicKey);
+
         Assert.assertEquals(EBANX.getPublicKey(),publicKey);
+        Assert.assertTrue(EBANX.publicKeyIsSet());
 
         EBANX.shutDown();
+    }
+
+    @Test
+    public void testPublicKeyIsSetFail() throws Exception {
+        Assert.assertFalse(EBANX.publicKeyIsSet());
     }
 
     @Test
@@ -73,6 +75,7 @@ public class EBANXTest {
     @Test
     public void testCreateCard() throws Exception {
         String name = "Fulano de tal";
+
         String number = "4111111111111111";
         String dueDate = "12/2016";
         String cvv = "123";
@@ -156,5 +159,26 @@ public class EBANXTest {
 
         Assert.assertNotNull(EBANXCreditCardType.values());
         Assert.assertNotNull(EBANXCreditCardType.valueOf("Visa"));
+    }
+
+    @Test
+    public void testIsSDKInitialized() throws Exception {
+        String publicKey = "123456";
+        EBANX.configure(mockedContext, publicKey);
+        EBANX.configure(mockedContext, publicKey, true);
+
+        Assert.assertFalse(EBANX.getTestMode());
+        EBANX.shutDown();
+    }
+
+    @Test
+    public void testIsSDKInitialized2() throws Exception {
+        String publicKey = "123456";
+        EBANX.configure(mockedContext, publicKey, true);
+        EBANX.configure(mockedContext, publicKey);
+
+
+        Assert.assertTrue(EBANX.getTestMode());
+        EBANX.shutDown();
     }
 }

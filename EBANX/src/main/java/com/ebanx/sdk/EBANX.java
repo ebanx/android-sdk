@@ -60,7 +60,7 @@ public final class EBANX {
         instance.publicKey = publicKey;
         instance.testMode = testMode;
         instance.network = new EBANXNetwork(instance.context);
-        EBANX.Token.storage = new EBANXStorage(instance.context);
+        Token.storage = new EBANXStorage(instance.context);
         isSDKInitialized = true;
     }
 
@@ -92,6 +92,10 @@ public final class EBANX {
 
     static void shutDown() {
         isSDKInitialized = false;
+        instance.context = null;
+        instance.publicKey = null;
+        instance.testMode = false;
+        Token.storage = null;
     }
 
     /**
@@ -151,6 +155,11 @@ public final class EBANX {
          * @param cvv String
          */
         public static void setCVV(String token, String cvv, final EBANXTokenRequestComplete complete) {
+            if (!publicKeyIsSet()) {
+                complete.APIError(EBANXError.createPublicKeyNotSetError());
+                return;
+            }
+
             instance.network.setCVV(token, cvv, new EBANXResponseNetwork() {
                 @Override
                 public void OnSuccess(String response) {
