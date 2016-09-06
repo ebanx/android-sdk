@@ -41,7 +41,7 @@ Public key and the integration of key are generated at the time of creation of t
 
 ```java
 // Configuration for production environment
- EBANX.configure(getApplicationContext(), "your public key");
+EBANX.configure(getApplicationContext(), "your public key");
 
 // Configuration for development environment
 EBANX.configure(getApplicationContext(), "your public key", true);
