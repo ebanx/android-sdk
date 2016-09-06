@@ -12,6 +12,8 @@ import com.ebanx.sdk.entities.EBANXCreditCardType;
 import com.ebanx.sdk.entities.EBANXError;
 import com.ebanx.sdk.entities.EBANXToken;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -22,28 +24,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         EBANX.configure(getApplicationContext(), "1231000", true);
+        EBANXCreditCard card = new EBANXCreditCard("Fulano de tal", "4012888888881881", "12/2016", "321", EBANXCreditCardType.Visa);
+        EBANX.Token.create(card, EBANXCountry.BR, new EBANXTokenRequestComplete() {
+            @Override
+            public void Success(EBANXToken token) {
+                // Object EBANXToken
+            }
 
-        EBANX.Token.create(
-                new EBANXCreditCard(
-                        "Fulano de tal", "4012888888881881", "12/2016", "321", EBANXCreditCardType.Visa
-                ),
-                EBANXCountry.BR,
-                new EBANXTokenRequestComplete() {
-                    @Override
-                    public void Success(EBANXToken token) {
-                        Log.d(TAG, "Success:" + token.toString());
-                    }
+            @Override
+            public void APIError(EBANXError error) {
+                // Object EBANXError
+                // possibles type values:
+                // PublicKeyNotSet - Public key is not set in EBANX.configure()
+                // InvalidPublicKey - Public key invalid (API response)
+                // ParseError - Object not found
+                // GenericError
+            }
 
-                    @Override
-                    public void APIError(EBANXError error) {
-                        Log.d(TAG, "APIError:" + error.toString());
-                    }
-
-                    @Override
-                    public void NetworkError(Exception e) {
-                        Log.d(TAG, "NetworkError:" +  e.toString());
-                    }
-                }
-        );
+            @Override
+            public void NetworkError(Exception e) {
+                // Object error from NSURLSession case request fail
+            }
+        });
     }
 }

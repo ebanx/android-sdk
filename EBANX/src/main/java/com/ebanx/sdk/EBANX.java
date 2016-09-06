@@ -1,7 +1,6 @@
 package com.ebanx.sdk;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ebanx.sdk.entities.EBANXCountry;
 import com.ebanx.sdk.entities.EBANXCreditCard;
@@ -20,7 +19,6 @@ import java.util.List;
  */
 public final class EBANX {
 
-    public static final String TAG = "EBANX";
     private String publicKey;
     private boolean testMode;
     private Context context;
@@ -103,7 +101,13 @@ public final class EBANX {
      */
     public static final class Token {
 
-        private static final String TAG = "EBANXToken";
+        private static final String STATUS = "status";
+        private static final String ERROR = "ERROR";
+        private static final String TOKEN = "token";
+        private static final String STATUS_CODE = "status_code";
+        private static final String MASKED_CARD_NUMBER = "masked_card_number";
+        private static final String STATUS_MESSAGE = "status_message";
+
         static EBANXStorage storage;
 
         private Token() {}
@@ -189,7 +193,7 @@ public final class EBANX {
          * @return EBANXToken
          * @throws Exception
          */
-        public static EBANXToken getToken(String cardNumberMasked) throws Exception {
+        public static EBANXToken getToken(String cardNumberMasked) {
             return storage.getToken(cardNumberMasked);
         }
 
@@ -223,12 +227,12 @@ public final class EBANX {
             try {
                 JSONObject JSON = new JSONObject(response);
 
-                if (JSON.has("status")) {
-                    if (JSON.get("status").toString().equalsIgnoreCase("ERROR")) {
-                        EBANXError error = new EBANXError(JSON.getString("status"), JSON.getString("status_code"), JSON.getString("status_message"));
+                if (JSON.has(STATUS)) {
+                    if (JSON.get(STATUS).toString().equalsIgnoreCase(ERROR)) {
+                        EBANXError error = new EBANXError(JSON.getString(STATUS), JSON.getString(STATUS_CODE), JSON.getString(STATUS_MESSAGE));
                         complete.APIError(error);
                     } else {
-                        EBANXToken token = new EBANXToken(JSON.getString("token"), JSON.getString("masked_card_number"));
+                        EBANXToken token = new EBANXToken(JSON.getString(TOKEN), JSON.getString(MASKED_CARD_NUMBER));
                         storage.saveToken(token);
                         complete.Success(token);
                     }
