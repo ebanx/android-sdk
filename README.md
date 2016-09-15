@@ -30,14 +30,14 @@ Other features need to be made from server to server using its integration key.
 
 ## Configuration
 
-### How to get a Public Key
+#### How to get a Public Key
 
 Public key and the integration of key are generated at the time of creation of the merchant account.
 
 [Click here for more details](https://www.ebanx.com/business/en)
 
 
-### Set Public Key
+#### Set Public Key
 
 ```java
 // Configuration for production environment
@@ -49,7 +49,7 @@ EBANX.configure(getApplicationContext(), "your public key", true);
 
 ## Usage
 
-### Create Token
+#### Create Token
 
 The token operation is used to create a token for a given credit card to be used for recurrent payments.
 
@@ -80,7 +80,7 @@ EBANX.Token.create(card, EBANXCountry.BR, new EBANXTokenRequestComplete() {
 });
 ```
 
-### Set CVV
+#### Set CVV
 
 The setCVV operation is used to temporary associate a CVV with an existing token. This CVV will be used by the next request made with the associated token and then discarded.
 
@@ -113,21 +113,21 @@ EBANX.Token.setCVV(token, "123", new EBANXTokenRequestComplete() {
 });
 ```
 
-### Get all tokens
+#### Get all tokens
 
 ```java
 // return List<EBANXToken>
 List<EBANXToken> tokenList = EBANX.Token.getTokens();
 ```
 
-### Get token by masked creditcard number
+#### Get token by masked creditcard number
 
 ```java
 // return EBANXToken
 EBANXToken token = EBANX.Token.getToken("4111********1111");
 ```
 
-### Delete token
+#### Delete token
 
 ```java
 EBANToken currentToken = .......
@@ -135,13 +135,13 @@ EBANToken currentToken = .......
 EBANX.Token.deleteToken(token);
 ```
 
-### Delete all tokens
+#### Delete all tokens
 
 ```java
 EBANX.Token.deleteAllTokens();
 ```
 
-### Integration Examples
+#### Integration Examples
 
 - TODO
 
