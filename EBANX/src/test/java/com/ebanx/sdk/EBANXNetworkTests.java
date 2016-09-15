@@ -53,12 +53,12 @@ public class EBANXNetworkTests {
 
             @Override
             public void APIError(EBANXError error) {
-                signal.countDown();
+                called = true; signal.countDown();
             }
 
             @Override
             public void NetworkError(Exception e) {
-                signal.countDown();
+                called = true; signal.countDown();
             }
         });
 

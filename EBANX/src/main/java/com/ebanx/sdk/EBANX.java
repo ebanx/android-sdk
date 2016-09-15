@@ -33,6 +33,7 @@ public final class EBANX {
     /**
      * Configure EBANX SDK
      *
+     * @param context Context
      * @param publicKey String
      */
     public static void configure(Context context, String publicKey)  {
@@ -46,6 +47,7 @@ public final class EBANX {
     /**
      * * Configure EBANX SDK and set testMode
      *
+     * @param context Context
      * @param publicKey String
      * @param testMode boolean
      */
@@ -117,6 +119,7 @@ public final class EBANX {
          *
          * @param card EBANXCreditCard
          * @param country EBANXCountry
+         * @param complete EBANXTokenRequestComplete
          */
         public static void create(EBANXCreditCard card, EBANXCountry country, final EBANXTokenRequestComplete complete) {
             if (!publicKeyIsSet()) {
@@ -142,6 +145,7 @@ public final class EBANX {
          *
          * @param token EBANXToken
          * @param cvv String
+         * @param complete EBANXTokenRequestComplete
          */
         public static void setCVV(EBANXToken token, String cvv, EBANXTokenRequestComplete complete) {
             if (!publicKeyIsSet()) {
@@ -157,6 +161,7 @@ public final class EBANX {
          *
          * @param token String
          * @param cvv String
+         * @param complete EBANXTokenRequestComplete
          */
         public static void setCVV(String token, String cvv, final EBANXTokenRequestComplete complete) {
             if (!publicKeyIsSet()) {
@@ -180,7 +185,7 @@ public final class EBANX {
         /**
          * Retrive all tokens in EBANXStorage
          *
-         * @return List<EBANXToken>
+         * @return List
          */
         public static List<EBANXToken> getTokens() {
             return storage.getTokens();
@@ -189,9 +194,8 @@ public final class EBANX {
         /**
          * Retrive token from card number masked
          *
-         * @param cardNumberMasked
+         * @param cardNumberMasked String
          * @return EBANXToken
-         * @throws Exception
          */
         public static EBANXToken getToken(String cardNumberMasked) {
             return storage.getToken(cardNumberMasked);

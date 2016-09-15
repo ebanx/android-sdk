@@ -32,6 +32,8 @@ public enum EBANXCountry {
 
     /**
      * Returns the country in lower case
+     *
+     * @return String
      */
     public String description() {
         return toString().toLowerCase();

@@ -52,6 +52,8 @@ public enum EBANXCreditCardType {
 
     /**
      * Returns the code in lower case
+     *
+     * @return String
      */
     public String description() {
         return toString().toLowerCase();
