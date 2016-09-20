@@ -16,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/ebanx/android-sdk'
     gitUrl = 'https://github.com/ebanx/android-sdk.git'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     developerId = 'ebanx'
     developerName = ''
