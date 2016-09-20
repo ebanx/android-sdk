@@ -129,7 +129,7 @@ bintray {
     configurations = ['archives']
 
     pkg {
-        userOrg = key = properties.getProperty("bintray.org")
+        userOrg = properties.getProperty("bintray.org")
         repo = bintrayRepo
         name = bintrayName
         desc = libraryDescription
@@ -143,10 +143,10 @@ bintray {
             vcsTag = libraryVersion
             desc = libraryDescription
             attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
-//            gpg {
-//                sign = false
-//                passphrase = properties.getProperty("bintray.gpg.password")
-//            }
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
         }
     }
 }
@@ -170,14 +170,21 @@ task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

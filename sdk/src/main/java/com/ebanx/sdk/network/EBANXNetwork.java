@@ -61,7 +61,7 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
             creditcard.put("card_due_date", card.getDueDate());
             creditcard.put("card_cvv", card.getCvv());
 
-            parameters.put("public_integration_key", EBANX.getPublicKey());
+            parameters.put("integration_key", EBANX.getPublicKey());
             parameters.put("payment_type_code", card.getType().description());
             parameters.put("country", countryType.description());
             parameters.put("creditcard", creditcard);

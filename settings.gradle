@@ -1,1 +1,1 @@
-include ':EBANX', ':example'
+include ':sdk', ':example'
