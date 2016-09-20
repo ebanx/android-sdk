@@ -1,5 +1,34 @@
 apply plugin: 'com.android.library'
 apply plugin: 'jacoco'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'SDK'
+
+    publishedGroupId = 'com.ebanx'
+    libraryName = 'EBANX SDK'
+    artifact = 'sdk'
+
+    libraryDescription = 'The EBANX Android SDK was created to facilitate the creation of tokens, set the CVV created a token and tokens list already created by the SDK.'
+
+    siteUrl = 'https://github.com/ebanx/android-sdk'
+    gitUrl = 'https://github.com/ebanx/android-sdk.git'
+
+    libraryVersion = '1.0.0'
+
+    developerId = 'ebanx'
+    developerName = ''
+    developerEmail = 'liciane@ebanx.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://github.com/ebanx/android-sdk/LICENSE'
+    allLicenses = ["MIT"]
+}
+
+group = publishedGroupId // Maven Group ID for the artifact
+version = libraryVersion
 
 android {
     compileSdkVersion 24
@@ -10,7 +39,7 @@ android {
         targetSdkVersion 24
 
         versionCode 1
-        versionName "1.0"
+        versionName libraryVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -49,6 +78,79 @@ dependencies {
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'org.json:json:20140107'
 }
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+                version libraryVersion
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+
+    pkg {
+        userOrg = key = properties.getProperty("bintray.org")
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            name = libraryVersion
+            vcsTag = libraryVersion
+            desc = libraryDescription
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+//            gpg {
+//                sign = false
+//                passphrase = properties.getProperty("bintray.gpg.password")
+//            }
+        }
+    }
+}
+
 
 task jacocoTestReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
