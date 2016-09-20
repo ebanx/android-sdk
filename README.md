@@ -25,8 +25,26 @@ Other features need to be made from server to server using its integration key.
 
 ## Integration
 
-- github
-- gradle
+#### Download
+
+Download [the latest aar](https://bintray.com/ebanx/maven/download_file?file_path=com%2Febanx%2Fsdk%2F1.0.1%2Fsdk-1.0.1.aar)
+
+#### Gradle
+
+```groovy
+compile 'com.ebanx:sdk:1.0.1'
+```
+
+#### Maven
+
+```xml
+<dependency>
+  <groupId>com.ebanx</groupId>
+  <artifactId>sdk</artifactId>
+  <version>1.0.1</version>
+  <type>pom</type>
+</dependency>
+```
 
 ## Configuration
 
