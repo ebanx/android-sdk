@@ -40,7 +40,7 @@ public class EBANXNetworkTests {
 
         final CountDownLatch signal = new CountDownLatch(1);
 
-        EBANX.configure(mockedContext, "1231000", true);
+        EBANX.configure(mockedContext, "test_pk_j5KbVAb_BjqH2n18ugykGA", true);
         EBANXCreditCard creditCard = new EBANXCreditCard("Fulano de tal", "4111111111111111","12/2016","123", EBANXCreditCardType.Visa);
 
         EBANX.Token.create(creditCard, EBANXCountry.BR, new EBANXTokenRequestComplete() {
@@ -106,7 +106,7 @@ public class EBANXNetworkTests {
 
         final CountDownLatch signal = new CountDownLatch(1);
 
-        EBANX.configure(mockedContext, "1231000", true);
+        EBANX.configure(mockedContext, "test_pk_j5KbVAb_BjqH2n18ugykGA", true);
         EBANXToken token = new EBANXToken("12345678", "4111********1111");
 
         EBANX.Token.setCVV(token, "123", new EBANXTokenRequestComplete() {
@@ -139,9 +139,9 @@ public class EBANXNetworkTests {
 
         final CountDownLatch signal = new CountDownLatch(1);
 
-        EBANX.configure(mockedContext, "1231000", true);
+        EBANX.configure(mockedContext, "test_pk_j5KbVAb_BjqH2n18ugykGA", true);
 
-        EBANX.Token.setCVV("12345678", "123", new EBANXTokenRequestComplete() {
+        EBANX.Token.setCVV("12345678", "321", new EBANXTokenRequestComplete() {
             @Override
             public void Success(EBANXToken token) {
                 signal.countDown();

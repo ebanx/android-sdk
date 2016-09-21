@@ -27,6 +27,16 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
     private static final String TAG = "EBANXNetwork";
     private static final int TIMEOUT = 10000;
     private static final int CONNECT_TIMEOUT = 15000;
+    private static final String CARD_NUMBER = "card_number";
+    private static final String CARD_NAME = "card_name";
+    private static final String CARD_DUE_DATE = "card_due_date";
+    private static final String CARD_CVV = "card_cvv";
+    private static final String PUBLIC_INTEGRATION_KEY = "public_integration_key";
+    private static final String PAYMENT_TYPE_CODE = "payment_type_code";
+    private static final String COUNTRY = "country";
+    private static final String CREDITCARD = "creditcard";
+    private static final String TOKEN = "token";
+
     private Context context;
 
     private enum Method {
@@ -56,15 +66,15 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
         JSONObject creditcard = new JSONObject();
 
         try {
-            creditcard.put("card_number", card.getNumber());
-            creditcard.put("card_name", card.getName());
-            creditcard.put("card_due_date", card.getDueDate());
-            creditcard.put("card_cvv", card.getCvv());
+            creditcard.put(CARD_NUMBER, card.getNumber());
+            creditcard.put(CARD_NAME, card.getName());
+            creditcard.put(CARD_DUE_DATE, card.getDueDate());
+            creditcard.put(CARD_CVV, card.getCvv());
 
-            parameters.put("integration_key", EBANX.getPublicKey());
-            parameters.put("payment_type_code", card.getType().description());
-            parameters.put("country", countryType.description());
-            parameters.put("creditcard", creditcard);
+            parameters.put(PUBLIC_INTEGRATION_KEY, EBANX.getPublicKey());
+            parameters.put(PAYMENT_TYPE_CODE, card.getType().description());
+            parameters.put(COUNTRY, countryType.description());
+            parameters.put(CREDITCARD, creditcard);
 
         } catch (JSONException e) {
             complete.OnFailure(e);
@@ -86,9 +96,9 @@ public final class EBANXNetwork implements EBANXNetworkingInterface {
         JSONObject parameters = new JSONObject();
 
         try {
-            parameters.put("public_integration_key", EBANX.getPublicKey());
-            parameters.put("token", token);
-            parameters.put("card_cvv", cvv);
+            parameters.put(PUBLIC_INTEGRATION_KEY, EBANX.getPublicKey());
+            parameters.put(TOKEN, token);
+            parameters.put(CARD_CVV, cvv);
 
         } catch (JSONException e) {
 
