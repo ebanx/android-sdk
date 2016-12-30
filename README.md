@@ -6,8 +6,6 @@ The EBANX Android SDK was created to facilitate the creation of tokens, set the 
 
 Other features need to be made from server to server using its integration key.
 
-[SDK integration examples for the server](#integration-examples)
-
 ## Features
 
 - [Create Token](#create-token)
@@ -17,7 +15,7 @@ Other features need to be made from server to server using its integration key.
 - [Delete token](#delete-token)
 - [Delete all tokens](delete-all-tokens)
 
-<!-- - [Complete Documentation](http://cocoadocs.org/docsets/EBANX) -->
+<!-- - [Complete Documentation](https://www.ebanx.com/business/en/developers/sdk-reference/android-sdk-reference) -->
     
 ## Requirements
 
@@ -158,10 +156,6 @@ EBANX.Token.deleteToken(token);
 ```java
 EBANX.Token.deleteAllTokens();
 ```
-
-#### Integration Examples
-
-- TODO
 
 ## Credit
 
